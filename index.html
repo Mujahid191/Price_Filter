@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css">
+    <title>Document</title>
+
+    <style>
+
+.price_area .slider_area {
+  background-color: #eeeeee;
+  height: 5px;
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  border-radius: 20px;
+  outline: none;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+}
+.price_area .slider_area .progress_bar {
+  position: absolute;
+  background: #CC2121;
+  height: 100%;
+  border-radius: 40px;
+  transition: none;
+  -webkit-border-radius: 40px;
+  -moz-border-radius: 40px;
+  -ms-border-radius: 40px;
+  -o-border-radius: 40px;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+}
+.price_area .slider_area .range_left, .price_area .slider_area .range_right {
+  position: absolute;
+  top: -5.5px;
+  width: 100%;
+  -webkit-appearance: none;
+  background: none;
+  outline: none;
+  pointer-events: none;
+}
+.price_area .slider_area .range_left::-webkit-slider-thumb, .price_area .slider_area .range_right::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  background: #fff;
+  pointer-events: auto;
+  cursor: ew-resize;
+  border: 3px solid #CC2121;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+}
+.price_area .price_inputs {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  font-size: 1rem;
+  margin: 1rem auto 2rem;
+  color: #555;
+}
+.price_area .max_range, .price_area .min_range {
+  width: 70%;
+  font-size: 1.4rem;
+  text-align: center;
+}
+.price_area .max_range:focus, .price_area .min_range:focus {
+  outline: none;
+}
+.price_area .filter_btn {
+  width: 100%;
+  font-size: 1.4rem;
+  margin-top: 2rem;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row text-center justify-content-center">
+            <div class="col-auto">
+                <div class="price_area my-5">
+                    <div class="row">
+                        <h2>Price</h2>
+                        <div class="price_text">
+                            <div class="price_inputs">
+                               <div class="price_minimum">
+                                <label for="price">Minimum:$0</label> <br>
+                                <input type="number" name="price" id="price" value="0" class="min_range">
+                               </div>
+                               <div class="price_maximum">
+                                <label for="price">Maximum:$1200</label> <br>
+                                <input type="number" name="price" id="price" value="1200" class="max_range">
+                               </div>
+                            </div>
+                            <div class="slider_area">
+                                <div class="progress_bar"></div>
+                                <input type="range" name="" id="min_icon" class="range_left" value="0" max="1200">
+                                <input type="range" name="" id="max_icon" class="range_right" value="1200" max="1200">
+                            </div>
+                            <button class="btn btn-danger filter_btn">Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const price_slider = () =>{
+            const min_input = document.querySelector('.min_range');
+            const max_input = document.querySelector('.max_range');
+            const min_icon = document.querySelector('.range_left');
+            const max_icon = document.querySelector('.range_right');
+            const progress_bar = document.querySelector('.progress_bar');
+
+            min_input.addEventListener('input', () =>{
+            if((max_input.value - min_input.value) <= 0){
+                min_input.value = max_input.value;
+            }else{
+                min_icon.value = min_input.value;
+                updateProgressBar();
+            }
+            })
+            max_input.addEventListener('input', () =>{
+            if((max_input.value - min_input.value) <= 0){
+                max_input.value = min_input.value
+            }else{
+                max_icon.value = max_input.value;
+            updateProgressBar();
+            }
+            })
+            min_icon.addEventListener('input', () =>{
+            if((max_icon.value - min_icon.value) <= 0){
+                min_icon.value = max_icon.value
+            }else{
+                min_input.value = min_icon.value;
+            updateProgressBar();
+            }
+            })
+            max_icon.addEventListener('input', () =>{
+            if((max_icon.value - min_icon.value) <= 0){
+                max_icon.value = min_icon.value;
+            }else{
+                max_input.value = max_icon.value;
+                updateProgressBar();
+            }
+            })
+
+            function updateProgressBar() {
+            const minValue = parseFloat(min_icon.value);
+            const maxValue = parseFloat(max_icon.value);
+            const totalRange = 1200;
+            const minIconPosition = ((minValue) / totalRange) * 100;
+            const maxIconPosition = ((maxValue) / totalRange) * 100;
+            const progressBarWidth = maxIconPosition - minIconPosition;
+            progress_bar.style.left = minIconPosition + '%';
+            progress_bar.style.width = progressBarWidth + '%';
+            }
+            updateProgressBar();
+        }
+        price_slider();
+        /*--------------- Price filter Show on mobile ---------------*/
+       /*  const price_filter_show = () =>{
+            const show_filter = document.querySelector('.filter_section');
+            show_filter.classList.toggle('filter_section_show');
+        }
+        document.querySelector('.fa-filter').addEventListener('click', price_filter_show);
+        document.querySelector('.filter_close').addEventListener('click', price_filter_show); */
+    </script>
+</body>
+</html>
